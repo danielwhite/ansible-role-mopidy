@@ -1,0 +1,39 @@
+---
+
+# Provide docker for testing other distros
+sudo: required
+services:
+  - docker
+
+env:
+  - distribution: ubuntu
+    version: 14.04
+    init: /sbin/init
+    run_opts: ""
+
+before_install:
+  - docker pull ${distribution}:${version}
+  - docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests
+
+install:
+  - container_id=$(mktemp) # track container
+  - docker run -d --volume="${PWD}":/etc/ansible/roles/mopidy:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"
+  - docker ps -a
+
+script:
+  # Basic role syntax check
+  - docker exec --tty "$(< $container_id)" env TERM=xterm ansible-playbook /etc/ansible/roles/mopidy/tests/test.yml --syntax-check
+  # Test role
+  - docker exec --tty "$(< $container_id)" env TERM=xterm ansible-playbook /etc/ansible/roles/mopidy/tests/test.yml
+  # Check idempotence of role
+  - >
+    docker exec --tty "$(< $container_id)" env TERM=xterm ansible-playbook /etc/ansible/roles/mopidy/tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+after_script:
+  - docker stop "$(< $container_id)"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

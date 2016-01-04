@@ -1,0 +1,7 @@
+---
+
+# List of extensions to install
+mopidy_extensions: []
+
+# List of settings to configure; these are used be the 'ini_file' module.
+mopidy_settings: []
