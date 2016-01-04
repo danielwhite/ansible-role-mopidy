@@ -15,6 +15,12 @@ mopidy_extensions: []
 A list of extensions to install from the package manager.
 
 ```
+mopidy_external_extensions: []
+```
+
+A list of external extensions that are not contained in the repository, but can be obtained with pip.
+
+```
 mopidy_settings: []
 ```
 

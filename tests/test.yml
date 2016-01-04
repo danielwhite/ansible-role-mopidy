@@ -1,5 +1,10 @@
 ---
 
 - hosts: localhost
+  vars:
+    mopidy_extensions:
+      - mopidy-local-sqlite
+    mopidy_external_extensions:
+      - Mopidy-Simple-Webclient
   roles:
     - mopidy
