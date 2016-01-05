@@ -1,0 +1,11 @@
+---
+
+- name: Configure Mopidy
+  ini_file:
+    dest: "{{ mopidy_conf_path }}"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items: settings
+  notify: restart mopidy

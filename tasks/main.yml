@@ -10,15 +10,9 @@
   with_items: mopidy_external_extensions
   notify: restart mopidy
 
-- name: Configure Mopidy
-  ini_file:
-    dest: /etc/mopidy/mopidy.conf
-    section: "{{ item.section }}"
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-    state: present
-  with_items: mopidy_settings
-  notify: restart mopidy
+- include: settings.yml
+  vars:
+    settings: "{{ mopidy_settings }}"
 
 - name: Ensure Mopidy is started on boot.
   service:
