@@ -21,3 +21,9 @@
     state: present
   with_items: mopidy_extensions
   notify: restart mopidy
+
+- name: Ensure pip is available.
+  apt:
+    name: python-pip
+    state: present
+  when: mopidy_external_extensions

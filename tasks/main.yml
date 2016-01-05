@@ -3,6 +3,13 @@
 - include: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
+- name: Install mopidy external extensions.
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items: mopidy_external_extensions
+  notify: restart mopidy
+
 - name: Configure Mopidy
   ini_file:
     dest: /etc/mopidy/mopidy.conf
