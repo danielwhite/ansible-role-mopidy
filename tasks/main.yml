@@ -7,7 +7,7 @@
   pip:
     name: "{{ item }}"
     state: present
-  with_items: mopidy_external_extensions
+  with_items: "{{ mopidy_external_extensions }}"
   notify: restart mopidy
 
 - name: Configure Mopidy
@@ -17,7 +17,7 @@
     option: "{{ item.option }}"
     value: "{{ item.value }}"
     state: present
-  with_items: mopidy_settings
+  with_items: "{{ mopidy_settings }}"
   notify: restart mopidy
 
 - name: Ensure Mopidy is started on boot.

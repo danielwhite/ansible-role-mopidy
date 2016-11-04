@@ -19,7 +19,7 @@
   apt:
     name: "{{ item }}"
     state: present
-  with_items: mopidy_extensions
+  with_items: "{{ mopidy_extensions }}"
   notify: restart mopidy
 
 - name: Ensure pip is available.
